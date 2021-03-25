@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-chip-group>
+      <v-chip class="text-white" label color="blue">
+        {{ `Total Tasks ${inProgress + completed}` }}
+      </v-chip>
       <v-chip class="text-white" label color="green">
         {{ `Tasks Completed ${completed}` }}
       </v-chip>
@@ -27,7 +30,7 @@ export default {
         let tempCompleted = 0;
         let tempInProgress = 0;
         newVal.forEach((task) => {
-          if (task.complete) {
+          if (task.completed) {
             tempCompleted = tempCompleted + 1;
           } else {
             tempInProgress = tempInProgress + 1;
