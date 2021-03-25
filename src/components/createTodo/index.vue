@@ -1,8 +1,21 @@
 <template>
-  <form v-on:submit.prevent="submit">
-    <input placeholder="Create Task" :value="this.value" @change="onChange" />
-    <button type="input">Add Task</button>
-  </form>
+  <v-form v-on:submit.prevent="submit">
+    <v-text-field
+      solo
+      required
+      v-model="value"
+      placeholder="Create Task"
+      :value="this.value"
+    >
+      <template v-slot:append>
+        <v-btn :disabled="!value" icon type="input">
+          <v-icon>
+            mdi-plus
+          </v-icon>
+        </v-btn>
+      </template>
+    </v-text-field>
+  </v-form>
 </template>
 
 <script>
@@ -14,12 +27,12 @@ export default {
     };
   },
   methods: {
-    onChange(e) {
-      this.value = e.currentTarget.value;
-    },
     submit() {
+      if (this.value === '') return;
+
       this.$emit('create', { title: this.value });
-      console.log(this.value);
+
+      this.value = '';
     },
   },
 };
