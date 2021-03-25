@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
-        <TodoList />
-      </v-container>
+      <TodoList />
     </v-main>
   </v-app>
 </template>
