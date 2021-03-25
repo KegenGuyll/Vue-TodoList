@@ -31,13 +31,7 @@ export default {
   },
   data() {
     return {
-      tasks: [
-        {
-          id: 1,
-          title: 'Testing',
-          complete: false,
-        },
-      ],
+      tasks: [],
     };
   },
   methods: {
