@@ -1,12 +1,16 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <TodoList />
-  </div>
+  <v-app>
+    <v-main>
+      <v-container>
+        <TodoList />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
 import TodoList from './components/todoList';
+
 export default {
   name: 'App',
   components: {
@@ -14,14 +18,3 @@ export default {
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
