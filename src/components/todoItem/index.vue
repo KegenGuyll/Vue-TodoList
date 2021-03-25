@@ -9,7 +9,12 @@
       <v-card-text>
         <p v-if="!editMode" class="display-1 text--primary">{{ title }}</p>
         <v-form v-if="editMode" v-on:submit.prevent="editTask">
-          <v-text-field v-model="editedValue" :label="title" outlined>
+          <v-text-field
+            autofocus
+            color="grey darken-1"
+            v-model="editedValue"
+            :label="title"
+          >
             <template v-slot:append>
               <v-btn icon type="input">
                 <v-icon>
@@ -27,12 +32,12 @@
           </v-icon>
         </v-btn>
         <v-btn v-on:click="toggleEditMode" icon>
-          <v-icon>
+          <v-icon color="blue">
             mdi-circle-edit-outline
           </v-icon>
         </v-btn>
         <v-btn icon v-on:click="deleteTask">
-          <v-icon>
+          <v-icon color="red">
             mdi-trash-can-outline
           </v-icon>
         </v-btn>
@@ -70,19 +75,11 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  padding: 4em;
-  color: black;
-  border: 2px solid black;
-  max-width: 150px;
-  background-color: white;
-}
-
 .completeBorder {
-  border-top: 2px solid #4caf50;
+  border-top: 5px solid #4caf50;
 }
 
 .inProgressBorder {
-  border-top: 2px solid #fe9f13;
+  border-top: 5px solid #fe9f13;
 }
 </style>
