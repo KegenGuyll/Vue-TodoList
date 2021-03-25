@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-      :class="{ completeBorder: complete, inProgressBorder: !complete }"
+      :class="{ completeBorder: completed, inProgressBorder: !completed }"
       elevation="2"
       class="mx-auto"
       width="344"
@@ -27,8 +27,8 @@
       </v-card-text>
       <v-card-actions>
         <v-btn icon v-on:click="setComplete">
-          <v-icon :color="complete ? 'green' : 'orange'">
-            {{ complete ? 'mdi-progress-check' : 'mdi-progress-clock' }}
+          <v-icon :color="completed ? 'green' : 'orange'">
+            {{ completed ? 'mdi-progress-check' : 'mdi-progress-clock' }}
           </v-icon>
         </v-btn>
         <v-btn v-on:click="toggleEditMode" icon>
@@ -49,7 +49,7 @@
 <script>
 export default {
   name: 'todoItem',
-  props: ['title', 'complete', 'id'],
+  props: ['title', 'completed', 'id'],
   data() {
     return {
       editedValue: '',
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     setComplete() {
-      this.$emit('complete', !this.complete);
+      this.$emit('complete', !this.completed);
     },
     editTask() {
       this.$emit('edit', this.editedValue);
