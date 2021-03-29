@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     tasks: [],
     isLoading: false,
+    error: {},
   },
   mutations: {
     SET_TASKS(state, tasks) {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     SET_LOADING(state, isLoading) {
       state.isLoading = isLoading;
     },
+    SET_ERRORS(state, e) {
+      state.error = e;
+    },
   },
   actions: {
     fetchTasks(context) {
@@ -43,6 +47,10 @@ export default new Vuex.Store({
         .then((response) => {
           context.commit('SET_LOADING', false);
           context.commit('SET_TASKS', response.data);
+        })
+        .catch((e) => {
+          context.commit('SET_LOADING', false);
+          context.commit('SET_ERRORS', e);
         });
     },
     postTask(context, task) {
@@ -52,6 +60,10 @@ export default new Vuex.Store({
         .then((response) => {
           context.commit('SET_LOADING', false);
           context.commit('CREATE_TASK', response.data);
+        })
+        .catch((e) => {
+          context.commit('SET_LOADING', false);
+          context.commit('SET_ERRORS', e);
         });
     },
     putTask(context, task) {
@@ -62,6 +74,10 @@ export default new Vuex.Store({
         .then((response) => {
           context.commit('SET_LOADING', false);
           context.commit('UPDATE_TASK', response.data);
+        })
+        .catch((e) => {
+          context.commit('SET_LOADING', false);
+          context.commit('SET_ERRORS', e);
         });
     },
     deleteTask(context, id) {
@@ -71,6 +87,10 @@ export default new Vuex.Store({
         .then(() => {
           context.commit('SET_LOADING', false);
           context.commit('REMOVE_TASK', id);
+        })
+        .catch((e) => {
+          context.commit('SET_LOADING', false);
+          context.commit('SET_ERRORS', e);
         });
     },
   },
@@ -92,6 +112,9 @@ export default new Vuex.Store({
     },
     loadingStatus(state) {
       return state.isLoading;
+    },
+    getError(state) {
+      return state.error;
     },
   },
   modules: {},
