@@ -1,12 +1,12 @@
 <template>
-  <v-chip-group>
-    <v-chip class="text-white" color="blue">
+  <v-chip-group show-arrows>
+    <v-chip text-color="white" color="blue">
       {{ `Total Tasks ${inProgress + completed}` }}
     </v-chip>
-    <v-chip class="text-white" color="green">
+    <v-chip text-color="white" color="green">
       {{ `Tasks Completed ${completed}` }}
     </v-chip>
-    <v-chip class="text-white" color="orange">
+    <v-chip text-color="white" color="orange">
       {{ `Tasks In Progress ${inProgress}` }}
     </v-chip>
   </v-chip-group>
@@ -18,9 +18,3 @@ export default {
   props: ['inProgress', 'completed'],
 };
 </script>
-
-<style scoped>
-.text-white {
-  color: white !important;
-}
-</style>

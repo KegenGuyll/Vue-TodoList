@@ -11,12 +11,12 @@
         <v-form v-if="editMode" v-on:submit.prevent="editTask">
           <v-text-field
             autofocus
-            color="grey darken-1"
+            :color="completed ? 'green' : 'orange'"
             v-model="editedValue"
             :label="title"
           >
             <template v-slot:append>
-              <v-btn icon type="input">
+              <v-btn :disabled="!editedValue" icon type="input">
                 <v-icon>
                   mdi-content-save
                 </v-icon>
@@ -61,6 +61,8 @@ export default {
       this.$emit('complete', !this.completed);
     },
     editTask() {
+      if (!this.editedValue) return;
+
       this.$emit('edit', this.editedValue);
       this.editMode = false;
     },

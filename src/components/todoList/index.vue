@@ -12,7 +12,6 @@
         </v-container>
       </v-card>
     </div>
-
     <v-container>
       <v-row>
         <v-col style="flex-grow:0" v-for="task in tasks" :key="task.id">
@@ -43,9 +42,6 @@ export default {
     CreateTodo,
     ItemCounter,
     LoadingBar,
-  },
-  data() {
-    return {};
   },
   computed: {
     ...mapGetters({
