@@ -30,7 +30,11 @@ export default {
     submit() {
       if (this.value === '') return;
 
-      this.$emit('create', { title: this.value });
+      this.$emit('create', {
+        id: this.$store.getters.allTasksCount + 1,
+        title: this.value,
+        completed: false,
+      });
 
       this.value = '';
     },
