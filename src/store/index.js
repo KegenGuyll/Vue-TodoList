@@ -13,9 +13,10 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_TASKS(state, tasks) {
-      state.tasks = tasks.sort(statusSorter);
+      Vue.set(state, 'tasks', tasks.sort(statusSorter));
     },
     CREATE_TASK(state, task) {
+      task.id = state.tasks.length + 1;
       state.tasks = [{ ...task }, ...state.tasks];
     },
     UPDATE_TASK(state, task) {
@@ -95,6 +96,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    allTasksCount(state) {
+      return state.tasks.length;
+    },
     completedTasksCount(state) {
       return state.tasks.filter((task) => task.completed === true).length;
     },
