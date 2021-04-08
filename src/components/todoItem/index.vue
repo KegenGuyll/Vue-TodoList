@@ -48,7 +48,7 @@ import DeleteDialog from './deleteDialog';
 export default {
   components: { DeleteDialog },
   name: 'todoItem',
-  props: ['title', 'completed', 'id'],
+  props: ['title', 'completed'],
   data() {
     return {
       editedValue: '',
