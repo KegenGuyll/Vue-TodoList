@@ -1,12 +1,20 @@
 <template>
   <v-chip-group show-arrows>
-    <v-chip text-color="white" color="blue">
-      {{ `Total Tasks ${inProgress + completed}` }}
+    <v-chip v-on:click="$emit('displayAll')" text-color="white" color="blue">
+      {{ `Total Tasks ${totalCount}` }}
     </v-chip>
-    <v-chip text-color="white" color="green">
+    <v-chip
+      v-on:click="$emit('displayCompleted')"
+      text-color="white"
+      color="green"
+    >
       {{ `Tasks Completed ${completed}` }}
     </v-chip>
-    <v-chip text-color="white" color="orange">
+    <v-chip
+      v-on:click="$emit('displayInProgress')"
+      text-color="white"
+      color="orange"
+    >
       {{ `Tasks In Progress ${inProgress}` }}
     </v-chip>
   </v-chip-group>
@@ -15,6 +23,6 @@
 <script>
 export default {
   name: 'ItemCounter',
-  props: ['inProgress', 'completed'],
+  props: ['inProgress', 'completed', 'totalCount'],
 };
 </script>
