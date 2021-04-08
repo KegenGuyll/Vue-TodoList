@@ -7,7 +7,7 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
-  name: 'Error Alert',
+  name: 'ErrorAlert',
   computed: {
     ...mapGetters({
       error: 'getError',
