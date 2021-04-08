@@ -12,8 +12,9 @@
           <v-text-field
             autofocus
             :color="completed ? 'green' : 'orange'"
-            v-model="editedValue"
             :label="title"
+            :value="title"
+            v-on:change="onChange"
           >
             <template v-slot:append>
               <v-btn :disabled="!editedValue" icon type="input">
@@ -36,18 +37,16 @@
             mdi-circle-edit-outline
           </v-icon>
         </v-btn>
-        <v-btn icon v-on:click="deleteTask">
-          <v-icon color="red">
-            mdi-trash-can-outline
-          </v-icon>
-        </v-btn>
+        <DeleteDialog @deleteTask="deleteTask" />
       </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script>
+import DeleteDialog from './deleteDialog';
 export default {
+  components: { DeleteDialog },
   name: 'todoItem',
   props: ['title', 'completed', 'id'],
   data() {
@@ -57,6 +56,9 @@ export default {
     };
   },
   methods: {
+    onChange(value) {
+      this.editedValue = value;
+    },
     setComplete() {
       this.$emit('complete', !this.completed);
     },
