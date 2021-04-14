@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
+import removeDuplicates from '../utils/removeDup';
 import statusSorter from '../utils/statusSorter';
 
 Vue.use(Vuex);
@@ -10,6 +11,7 @@ export default new Vuex.Store({
     tasks: [],
     isLoading: false,
     error: {},
+    tags: {},
   },
   mutations: {
     SET_TASKS(state, tasks) {
@@ -39,8 +41,14 @@ export default new Vuex.Store({
     SET_ERRORS(state, e) {
       state.error = e;
     },
+    CREATE_TAG(state, payload) {
+      state.tags = { ...state.tags, [payload.id]: payload.tag };
+    },
   },
   actions: {
+    createTag(context, payload) {
+      context.commit('CREATE_TAG', payload);
+    },
     fetchTasks(context) {
       context.commit('SET_LOADING', true);
       axios
@@ -68,7 +76,6 @@ export default new Vuex.Store({
         });
     },
     putTask(context, task) {
-      console.log(task);
       context.commit('SET_LOADING', true);
       axios
         .put(`https://jsonplaceholder.typicode.com/todos/${task.id}`, task)
@@ -105,14 +112,26 @@ export default new Vuex.Store({
     inProgressTasksCount(state) {
       return state.tasks.filter((task) => task.completed === false).length;
     },
-    completedTasks(state) {
-      return state.tasks.filter((task) => task.completed === true);
+    allTags(state) {
+      return state.tags;
     },
-    inProgressTasks(state) {
-      return state.tasks.filter((task) => task.completed === false);
+    sortableTags(state) {
+      const tags = Object.entries(state.tags).map((value) => {
+        return {
+          name: value[1],
+        };
+      });
+
+      return removeDuplicates(tags);
     },
-    allTasks(state) {
-      return state.tasks;
+    sortLists(state) {
+      const list = {
+        allTasks: state.tasks,
+        completed: state.tasks.filter((task) => task.completed === true),
+        inProgress: state.tasks.filter((task) => task.completed === false),
+      };
+
+      return list;
     },
     loadingStatus(state) {
       return state.isLoading;
