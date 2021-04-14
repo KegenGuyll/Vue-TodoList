@@ -1,7 +1,7 @@
 <template>
   <div class="set-height">
     <v-progress-linear
-      v-if="isLoading"
+      v-if="loadingStatus"
       indeterminate
       color="blue"
     ></v-progress-linear>
@@ -9,9 +9,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'LoadingBar',
-  props: ['isLoading'],
+  computed: {
+    ...mapGetters(['loadingStatus']),
+  },
 };
 </script>
 
