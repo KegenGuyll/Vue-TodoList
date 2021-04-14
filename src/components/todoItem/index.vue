@@ -1,11 +1,17 @@
 <template>
-  <div>
+  <v-col v-if="search.includes(allTags[id]) || !tagSearchActive.length">
     <v-card
       :class="{ completeBorder: completed, inProgressBorder: !completed }"
       elevation="2"
       class="mx-auto"
       width="344"
     >
+      <div class="tagRow">
+        <div style="flex-grow:1">
+          <v-chip v-if="allTags[id]">{{ allTags[id] }}</v-chip>
+        </div>
+        <TagDialog @createTag="createTag" />
+      </div>
       <v-card-text>
         <p v-if="!editMode" class="display-1 text--primary">{{ title }}</p>
         <v-form v-if="editMode" v-on:submit.prevent="editTask">
@@ -40,20 +46,25 @@
         <DeleteDialog @deleteTask="deleteTask" />
       </v-card-actions>
     </v-card>
-  </div>
+  </v-col>
 </template>
 
 <script>
 import DeleteDialog from './deleteDialog';
+import TagDialog from './tagDialog';
+import { mapGetters } from 'vuex';
 export default {
-  components: { DeleteDialog },
+  components: { DeleteDialog, TagDialog },
   name: 'todoItem',
-  props: ['title', 'completed'],
+  props: ['title', 'completed', 'id', 'search', 'tagSearchActive'],
   data() {
     return {
       editedValue: '',
       editMode: false,
     };
+  },
+  computed: {
+    ...mapGetters(['allTags']),
   },
   methods: {
     onChange(value) {
@@ -74,6 +85,9 @@ export default {
     toggleEditMode() {
       this.editMode = !this.editMode;
     },
+    createTag(value) {
+      this.$emit('createTag', value);
+    },
   },
 };
 </script>
@@ -81,6 +95,16 @@ export default {
 <style scoped>
 .completeBorder {
   border-top: 5px solid #4caf50;
+}
+
+.tagIcon {
+  float: right;
+}
+
+.tagRow {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
 }
 
 .inProgressBorder {
