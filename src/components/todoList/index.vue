@@ -2,54 +2,44 @@
   <div>
     <div class="sticky">
       <v-card elevation="0">
-        <LoadingBar :isLoading="isLoading" />
+        <LoadingBar />
         <v-container>
-          <CreateTodo @create="createTask" :totalCount="allTasksCount" />
+          <CreateTodo @create="createTask" />
           <ItemCounter
-            :completed="completedCount"
-            :inProgress="inProgressCount"
-            :totalCount="allTasksCount"
             @displayInProgress="displayInProgress"
             @displayAll="displayAll"
             @displayCompleted="displayCompleted"
           />
+          <v-chip-group v-model="tagSearchActive" multiple>
+            <v-chip
+              v-for="tag in sortTags"
+              :key="tag.id"
+              v-on:click="searchTag(tag.name)"
+              filter
+              outlined
+            >
+              {{ tag.name }}
+            </v-chip>
+          </v-chip-group>
         </v-container>
       </v-card>
     </div>
     <v-container>
       <v-row>
-        <template v-if="activeSort === 'allTasks'">
-          <v-col style="flex-grow:0" v-for="task in alltasks" :key="task.id">
-            <TodoItem
-              :title="task.title"
-              :completed="task.completed"
-              @complete="completedTask($event, task)"
-              @delete="deleteTask(task.id)"
-              @edit="editTask($event, task)"
-            />
-          </v-col>
-        </template>
-        <template v-if="activeSort === 'completed'">
-          <v-col style="flex-grow:0" v-for="task in completed" :key="task.id">
-            <TodoItem
-              :title="task.title"
-              :completed="task.completed"
-              @complete="completedTask($event, task)"
-              @delete="deleteTask(task.id)"
-              @edit="editTask($event, task)"
-            />
-          </v-col>
-        </template>
-        <template v-if="activeSort === 'inProgress'">
-          <v-col style="flex-grow:0" v-for="task in inProgress" :key="task.id">
-            <TodoItem
-              :title="task.title"
-              :completed="task.completed"
-              @complete="completedTask($event, task)"
-              @delete="deleteTask(task.id)"
-              @edit="editTask($event, task)"
-            />
-          </v-col>
+        <template>
+          <TodoItem
+            v-for="task in tasks"
+            :key="task.id"
+            :id="task.id"
+            :title="task.title"
+            :completed="task.completed"
+            :search="search"
+            :tagSearchActive="tagSearchActive"
+            @complete="completedTask($event, task)"
+            @delete="deleteTask(task.id)"
+            @edit="editTask($event, task)"
+            @createTag="createTag($event, task.id)"
+          />
         </template>
       </v-row>
     </v-container>
@@ -61,7 +51,6 @@ import CreateTodo from '../createTodo';
 import TodoItem from '../todoItem';
 import ItemCounter from '../todoItem/ItemCounter';
 import LoadingBar from '../todoLoading';
-import { mapGetters } from 'vuex';
 import store from '../../store';
 export default {
   name: 'todoList',
@@ -73,26 +62,24 @@ export default {
   },
   data() {
     return {
-      activeSort: 'allTasks',
+      activeSortTasks: 'allTasks',
+      tagSearchActive: [],
+      search: [],
     };
   },
   computed: {
-    ...mapGetters({
-      alltasks: 'allTasks',
-      completed: 'completedTasks',
-      inProgress: 'inProgressTasks',
-      completedCount: 'completedTasksCount',
-      inProgressCount: 'inProgressTasksCount',
-      isLoading: 'loadingStatus',
-      allTasksCount: 'allTasksCount',
-    }),
+    tasks: function() {
+      return this.$store.getters.sortLists[this.activeSortTasks];
+    },
+    sortTags: function() {
+      return this.$store.getters.sortableTags;
+    },
   },
   created() {
     store.dispatch('fetchTasks');
   },
   methods: {
     createTask(task) {
-      console.log(task);
       store.dispatch('postTask', task);
     },
     completedTask(status, task) {
@@ -102,18 +89,29 @@ export default {
     deleteTask(id) {
       store.dispatch('deleteTask', id);
     },
+    searchTag(name) {
+      if (this.search.includes(name)) {
+        const index = this.search.indexOf((s) => s === name);
+        this.search.splice(index, 1);
+      } else {
+        this.search.push(name);
+      }
+    },
+    createTag(tag, id) {
+      store.dispatch('createTag', { id, tag });
+    },
     editTask(title, task) {
       task.title = title;
       store.dispatch('putTask', task);
     },
     displayInProgress() {
-      this.activeSort = 'inProgress';
+      this.activeSortTasks = 'inProgress';
     },
     displayAll() {
-      this.activeSort = 'allTasks';
+      this.activeSortTasks = 'allTasks';
     },
     displayCompleted() {
-      this.activeSort = 'completed';
+      this.activeSortTasks = 'completed';
     },
   },
 };
